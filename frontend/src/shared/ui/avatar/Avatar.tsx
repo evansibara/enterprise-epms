@@ -14,15 +14,17 @@ const palette = [
   "bg-cyan-100 text-cyan-700",
 ];
 
+const DEFAULT_COLOR = palette[0] as string;
+
 function colorFor(name: string): string {
   const sum = name.split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
-  return palette[sum % palette.length];
+  return palette[sum % palette.length] ?? DEFAULT_COLOR;
 }
 
 function initialsFor(name: string): string {
   const parts = name.trim().split(/\s+/);
   const first = parts[0]?.[0] ?? "";
-  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  const last = parts.length > 1 ? parts[parts.length - 1]?.[0] ?? "" : "";
   return (first + last).toUpperCase();
 }
 
@@ -47,16 +49,18 @@ export function Avatar({ name, className }: AvatarProps) {
     );
   }
 
+  const safeName: string = name;
+
   return (
     <div
       className={cn(
         "flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-semibold",
-        colorFor(name),
+        colorFor(safeName),
         className,
       )}
-      title={name}
+      title={safeName}
     >
-      {initialsFor(name)}
+      {initialsFor(safeName)}
     </div>
   );
 }
