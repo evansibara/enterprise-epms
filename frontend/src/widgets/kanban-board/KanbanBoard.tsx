@@ -10,8 +10,11 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
+import { CalendarClock } from "lucide-react";
 import { Card } from "@/shared/ui/card/Card";
 import { Badge } from "@/shared/ui/badge/Badge";
+import { Avatar } from "@/shared/ui/avatar/Avatar";
+import { formatDate, isDueSoonOrOverdue } from "@/shared/lib/format-date";
 import type { Task, TaskStatus } from "@/entities/task/task.types";
 
 const columns: { status: TaskStatus; label: string }[] = [
@@ -21,6 +24,8 @@ const columns: { status: TaskStatus; label: string }[] = [
   { status: "Done", label: "Done" },
 ];
 
+// Desaturated agar tidak terlalu mencolok dibanding warna danger/red yang
+// dipakai khusus untuk highlight due-date mendekati tenggat.
 const priorityTone = {
   Low: "neutral",
   Medium: "info",
@@ -31,9 +36,42 @@ const priorityTone = {
 interface KanbanBoardProps {
   tasks: Task[];
   onTaskStatusChange: (taskId: string, newStatus: TaskStatus) => void;
+  onTaskClick: (taskId: string) => void;
 }
 
-function TaskCard({ task }: { task: Task }) {
+function TaskCardBody({ task }: { task: Task }) {
+  const dueSoon = task.status !== "Done" && isDueSoonOrOverdue(task.dueDate);
+
+  return (
+    <>
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <p className="text-sm font-medium text-slate-900">{task.title}</p>
+        <Badge tone={priorityTone[task.priority]}>{task.priority}</Badge>
+      </div>
+
+      <p className="mb-2 text-xs text-slate-500 line-clamp-2">{task.description}</p>
+
+      <div className="flex items-center justify-between">
+        {task.dueDate ? (
+          <span
+            className={`flex items-center gap-1 text-xs ${
+              dueSoon ? "font-medium text-red-600" : "text-slate-400"
+            }`}
+          >
+            <CalendarClock className="h-3 w-3" />
+            {formatDate(task.dueDate)}
+          </span>
+        ) : (
+          <span />
+        )}
+
+        <Avatar name={task.assigneeName} />
+      </div>
+    </>
+  );
+}
+
+function TaskCard({ task, onTaskClick }: { task: Task; onTaskClick: (taskId: string) => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id,
   });
@@ -53,12 +91,11 @@ function TaskCard({ task }: { task: Task }) {
       {...attributes}
       className={isDragging ? "opacity-50" : undefined}
     >
-      <Card className="cursor-grab active:cursor-grabbing">
-        <div className="mb-2 flex items-start justify-between gap-2">
-          <p className="text-sm font-medium text-slate-900">{task.title}</p>
-          <Badge tone={priorityTone[task.priority]}>{task.priority}</Badge>
-        </div>
-        <p className="text-xs text-slate-500 line-clamp-2">{task.description}</p>
+      <Card
+        className="cursor-grab active:cursor-grabbing"
+        onClick={() => onTaskClick(task.id)}
+      >
+        <TaskCardBody task={task} />
       </Card>
     </div>
   );
@@ -68,10 +105,12 @@ function KanbanColumn({
   status,
   label,
   tasks,
+  onTaskClick,
 }: {
   status: TaskStatus;
   label: string;
   tasks: Task[];
+  onTaskClick: (taskId: string) => void;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
@@ -89,14 +128,14 @@ function KanbanColumn({
 
       <div className="flex min-h-[60px] flex-col gap-2">
         {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
+          <TaskCard key={task.id} task={task} onTaskClick={onTaskClick} />
         ))}
       </div>
     </div>
   );
 }
 
-export function KanbanBoard({ tasks, onTaskStatusChange }: KanbanBoardProps) {
+export function KanbanBoard({ tasks, onTaskStatusChange, onTaskClick }: KanbanBoardProps) {
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const sensors = useSensors(
@@ -138,6 +177,7 @@ export function KanbanBoard({ tasks, onTaskStatusChange }: KanbanBoardProps) {
             status={column.status}
             label={column.label}
             tasks={tasks.filter((task) => task.status === column.status)}
+            onTaskClick={onTaskClick}
           />
         ))}
       </div>
@@ -145,15 +185,7 @@ export function KanbanBoard({ tasks, onTaskStatusChange }: KanbanBoardProps) {
       <DragOverlay>
         {activeTask && (
           <Card className="cursor-grabbing shadow-lg">
-            <div className="mb-2 flex items-start justify-between gap-2">
-              <p className="text-sm font-medium text-slate-900">{activeTask.title}</p>
-              <Badge tone={priorityTone[activeTask.priority]}>
-                {activeTask.priority}
-              </Badge>
-            </div>
-            <p className="text-xs text-slate-500 line-clamp-2">
-              {activeTask.description}
-            </p>
+            <TaskCardBody task={activeTask} />
           </Card>
         )}
       </DragOverlay>

@@ -22,6 +22,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
+    public DbSet<Comment> Comments => Set<Comment>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
@@ -35,6 +37,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<TaskAttachment>().HasQueryFilter(e => e.DeletedAt == null);
         modelBuilder.Entity<ActivityLog>().HasQueryFilter(e => e.DeletedAt == null);
         modelBuilder.Entity<RefreshToken>().HasQueryFilter(e => e.DeletedAt == null);
+        modelBuilder.Entity<Comment>().HasQueryFilter(e => e.DeletedAt == null);
     }
 
     public override int SaveChanges()

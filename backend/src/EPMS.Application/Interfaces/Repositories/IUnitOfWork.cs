@@ -18,5 +18,7 @@ public interface IUnitOfWork
 
     IRefreshTokenRepository RefreshTokens { get; }
 
+    ICommentRepository Comments { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

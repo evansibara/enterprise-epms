@@ -6,6 +6,7 @@ export interface DashboardSummary {
   activeTasks: number;
   completedTasks: number;
   teamMembers: number;
+  pendingDeadlines: number;
 }
 
 export const dashboardApi = {

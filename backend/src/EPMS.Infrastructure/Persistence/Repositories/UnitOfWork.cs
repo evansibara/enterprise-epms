@@ -14,6 +14,8 @@ public class UnitOfWork : IUnitOfWork
     private IActivityLogRepository? _activityLogs;
     private IRefreshTokenRepository? _refreshTokens;
 
+    private ICommentRepository? _comments;
+
     public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;
@@ -30,6 +32,8 @@ public class UnitOfWork : IUnitOfWork
     public IActivityLogRepository ActivityLogs => _activityLogs ??= new ActivityLogRepository(_context);
 
     public IRefreshTokenRepository RefreshTokens => _refreshTokens ??= new RefreshTokenRepository(_context);
+
+    public ICommentRepository Comments => _comments ??= new CommentRepository(_context);
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
         await _context.SaveChangesAsync(cancellationToken);

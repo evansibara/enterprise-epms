@@ -5,6 +5,7 @@ import { DashboardPage } from "@/pages/dashboard/DashboardPage";
 import { ProjectListPage } from "@/pages/projects/ProjectListPage";
 import { ProjectDetailPage } from "@/pages/projects/ProjectDetailPage";
 import { KanbanBoardPage } from "@/pages/tasks/KanbanBoardPage";
+import { SettingsPage } from "@/pages/settings/SettingsPage";
 import { ProtectedRoute } from "@/features/rbac/ProtectedRoute";
 
 export function AppRouter() {
@@ -22,6 +23,7 @@ export function AppRouter() {
         <Route path="/projects" element={<ProjectListPage />} />
         <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
         <Route path="/projects/:projectId/board" element={<KanbanBoardPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
       {/* Contoh route khusus Admin/Manager, lihat RBAC di section 4.2 spesifikasi */}

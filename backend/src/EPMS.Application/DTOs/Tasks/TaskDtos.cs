@@ -18,6 +18,8 @@ public class TaskResponseDto
 
     public string Status { get; set; } = string.Empty;
 
+    public DateTime? DueDate { get; set; }
+
     public DateTime CreatedAt { get; set; }
 }
 
@@ -30,6 +32,8 @@ public class CreateTaskRequestDto
     public Guid? AssigneeId { get; set; }
 
     public string Priority { get; set; } = "Medium";
+
+    public DateTime? DueDate { get; set; }
 }
 
 public class UpdateTaskRequestDto
@@ -39,6 +43,8 @@ public class UpdateTaskRequestDto
     public string? Description { get; set; }
 
     public string Priority { get; set; } = "Medium";
+
+    public DateTime? DueDate { get; set; }
 }
 
 public class UpdateTaskStatusRequestDto

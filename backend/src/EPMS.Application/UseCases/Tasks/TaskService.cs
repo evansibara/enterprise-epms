@@ -45,7 +45,8 @@ public class TaskService : ITaskService
             Description = request.Description,
             AssigneeId = request.AssigneeId,
             Priority = priority,
-            Status = TaskStatusEnum.ToDo
+            Status = TaskStatusEnum.ToDo,
+            DueDate = request.DueDate
         };
 
         await _unitOfWork.Tasks.AddAsync(task, cancellationToken);
@@ -69,6 +70,7 @@ public class TaskService : ITaskService
         task.Title = request.Title;
         task.Description = request.Description;
         task.Priority = priority;
+        task.DueDate = request.DueDate;
         task.UpdatedAt = DateTime.UtcNow;
 
         _unitOfWork.Tasks.Update(task);
@@ -166,6 +168,7 @@ public class TaskService : ITaskService
         AssigneeName = task.Assignee?.Name,
         Priority = task.Priority.ToString(),
         Status = task.Status.ToString(),
+        DueDate = task.DueDate,
         CreatedAt = task.CreatedAt
     };
 }

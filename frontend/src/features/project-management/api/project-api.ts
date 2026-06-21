@@ -1,24 +1,16 @@
 import { apiClient } from "@/shared/api/axios-instance";
 import type { Project } from "@/entities/project/project.types";
+import type { PagedResult } from "@/shared/api/paged-result";
+
+// Re-export supaya kode lama yang mengimpor PagedResult dari sini
+// (mis. ProjectListPage.tsx) tidak perlu diubah.
+export type { PagedResult } from "@/shared/api/paged-result";
 
 export interface ProjectListParams {
   search?: string;
   status?: string;
   page?: number;
   pageSize?: number;
-}
-
-// Mencerminkan EPMS.Application.DTOs.Common.PagedResult<T> dari backend.
-// GET /api/v1/projects TIDAK mengembalikan array langsung, melainkan
-// objek paging ini — jangan diubah jadi Project[] tanpa mengubah backend.
-export interface PagedResult<T> {
-  items: T[];
-  page: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
 }
 
 export const projectApi = {

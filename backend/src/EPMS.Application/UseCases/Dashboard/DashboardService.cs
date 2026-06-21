@@ -34,12 +34,16 @@ public class DashboardService : IDashboardService
         var reviewCount = await _unitOfWork.Tasks.CountByStatusAsync(TaskStatusEnum.Review, cancellationToken);
         var doneCount = await _unitOfWork.Tasks.CountByStatusAsync(TaskStatusEnum.Done, cancellationToken);
 
+        // Ambang batas 3 hari ke depan dianggap "mendekati deadline" untuk widget dashboard.
+        var pendingDeadlines = await _unitOfWork.Tasks.CountPendingDeadlinesAsync(3, cancellationToken);
+
         return new DashboardSummaryDto
         {
             TotalProjects = totalProjects,
             ActiveTasks = toDoCount + inProgressCount + reviewCount,
             CompletedTasks = doneCount,
-            TeamMembers = totalUsers
+            TeamMembers = totalUsers,
+            PendingDeadlines = pendingDeadlines
         };
     }
 }

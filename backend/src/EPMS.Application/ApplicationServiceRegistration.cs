@@ -1,5 +1,6 @@
 using EPMS.Application.UseCases.ActivityLogs;
 using EPMS.Application.UseCases.Auth;
+using EPMS.Application.UseCases.Comments;
 using EPMS.Application.UseCases.Dashboard;
 using EPMS.Application.UseCases.Projects;
 using EPMS.Application.UseCases.Tasks;
@@ -23,6 +24,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IActivityRecorder, ActivityRecorder>();
         services.AddScoped<IActivityLogQueryService, ActivityLogQueryService>();
         services.AddScoped<IDashboardService, DashboardService>();
+        services.AddScoped<ICommentService, CommentService>();
 
         return services;
     }

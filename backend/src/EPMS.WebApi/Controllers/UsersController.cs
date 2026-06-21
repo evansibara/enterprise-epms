@@ -10,7 +10,7 @@ namespace EPMS.WebApi.Controllers;
 
 [ApiController]
 [Route("api/v1/users")]
-[Authorize(Policy = PolicyNames.AdminOnly)]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -20,6 +20,8 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
+    /// <summary>GET /api/v1/users — dipakai juga oleh frontend untuk dropdown Assignee,
+    /// jadi sengaja dibuka untuk semua role terautentikasi (bukan AdminOnly).</summary>
     [HttpGet]
     public async Task<IActionResult> List(
         [FromQuery] string? search, [FromQuery] int page = 1, [FromQuery] int pageSize = 20,
@@ -37,6 +39,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = PolicyNames.AdminOnly)]
     public async Task<IActionResult> Create(CreateUserRequestDto request, CancellationToken cancellationToken)
     {
         var result = await _userService.CreateAsync(request, cancellationToken);
@@ -44,6 +47,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = PolicyNames.AdminOnly)]
     public async Task<IActionResult> Update(Guid id, UpdateUserRequestDto request, CancellationToken cancellationToken)
     {
         var result = await _userService.UpdateAsync(id, request, cancellationToken);
@@ -51,6 +55,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Policy = PolicyNames.AdminOnly)]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         await _userService.DeleteAsync(id, cancellationToken);

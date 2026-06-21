@@ -6,6 +6,7 @@ interface AuthState {
   accessToken: string | null;
   isAuthenticated: boolean;
   setSession: (user: User, accessToken: string) => void;
+  setAccessToken: (accessToken: string) => void;
   clearSession: () => void;
 }
 
@@ -21,6 +22,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   setSession: (user, accessToken) =>
     set({ user, accessToken, isAuthenticated: true }),
+  // Dipakai oleh axios-instance saat refresh-token rotation: endpoint
+  // /auth/refresh backend HANYA mengembalikan access token baru, tidak ada
+  // data user, jadi user yang sudah ada di state TIDAK disentuh di sini.
+  setAccessToken: (accessToken) => set({ accessToken, isAuthenticated: true }),
   clearSession: () =>
     set({ user: null, accessToken: null, isAuthenticated: false }),
 }));

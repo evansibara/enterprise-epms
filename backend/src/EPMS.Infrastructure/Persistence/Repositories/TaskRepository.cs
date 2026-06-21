@@ -29,4 +29,14 @@ public class TaskRepository : RepositoryBase<ProjectTask>, ITaskRepository
     public async Task<int> CountByStatusAsync(
         TaskStatusEnum status, CancellationToken cancellationToken = default) =>
         await DbSet.CountAsync(t => t.Status == status, cancellationToken);
+
+    public async Task<int> CountPendingDeadlinesAsync(
+        int withinDays, CancellationToken cancellationToken = default)
+    {
+        var threshold = DateTime.UtcNow.AddDays(withinDays);
+
+        return await DbSet.CountAsync(
+            t => t.Status != TaskStatusEnum.Done && t.DueDate != null && t.DueDate <= threshold,
+            cancellationToken);
+    }
 }

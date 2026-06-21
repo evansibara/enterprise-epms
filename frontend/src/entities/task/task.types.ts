@@ -7,8 +7,10 @@ export interface Task {
   title: string;
   description: string;
   assigneeId: string | null;
+  assigneeName?: string | null;
   priority: TaskPriority;
   status: TaskStatus;
+  dueDate: string | null;
   createdAt: string;
   deletedAt: string | null;
 }

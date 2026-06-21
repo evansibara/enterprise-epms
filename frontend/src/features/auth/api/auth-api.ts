@@ -17,6 +17,14 @@ interface AuthResponse {
   accessToken: string;
 }
 
+// Mencerminkan EPMS.Application.DTOs.Auth.RefreshTokenResponseDto — backend
+// HANYA mengembalikan access token baru di endpoint ini, TIDAK ada data user
+// (berbeda dari login). Jangan disamakan dengan AuthResponse di atas.
+interface RefreshResponse {
+  accessToken: string;
+  accessTokenExpiresAt: string;
+}
+
 interface RegisterResponse {
   id: string;
   name: string;
@@ -34,5 +42,5 @@ export const authApi = {
   logout: () => apiClient.post("/auth/logout"),
 
   refresh: () =>
-    apiClient.post<AuthResponse>("/auth/refresh").then((res) => res.data),
+    apiClient.post<RefreshResponse>("/auth/refresh").then((res) => res.data),
 };
