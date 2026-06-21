@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: epms-postgres
+    environment:
+      POSTGRES_USER: epms_admin
+      POSTGRES_PASSWORD: supersecretpassword
+      POSTGRES_DB: epms_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - epms-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U epms_admin -d epms_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: epms-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - epms-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: epms-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=epms_db;Username=epms_admin;Password=supersecretpassword"
+      ConnectionStrings__Redis: "redis:6379"
+      Jwt__Secret: "${JWT_SECRET:-GANTI_SECRET_INI_DI_FILE_ENV_PRODUCTION_MINIMAL_32_KARAKTER}"
+      Jwt__Issuer: "EPMS.WebApi"
+      Jwt__Audience: "EPMS.Client"
+      Cors__AllowedOrigins__0: "http://localhost:5173"
+    ports:
+      - "8080:8080"
+    volumes:
+      - epms_uploads:/app/uploads
+    networks:
+      - epms-network
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: epms-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_BASE_URL: "http://localhost:8080/api/v1"
+    ports:
+      - "5173:5173"
+    networks:
+      - epms-network
+
+volumes:
+  postgres_data:
+  epms_uploads:
+
+networks:
+  epms-network:
+    driver: bridge

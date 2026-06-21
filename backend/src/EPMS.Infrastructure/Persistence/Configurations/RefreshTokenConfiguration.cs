@@ -1,0 +1,31 @@
+using EPMS.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace EPMS.Infrastructure.Persistence.Configurations;
+
+public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
+{
+    public void Configure(EntityTypeBuilder<RefreshToken> builder)
+    {
+        builder.ToTable("RefreshTokens");
+
+        builder.HasKey(r => r.Id);
+
+        builder.Property(r => r.TokenHash)
+            .HasMaxLength(255)
+            .IsRequired();
+
+        builder.HasIndex(r => r.TokenHash)
+            .IsUnique();
+
+        // RefreshToken ikut terhapus jika User dihapus secara fisik (cascade
+        // wajar di sini karena token tanpa user pemilik tidak ada gunanya).
+        builder.HasOne(r => r.User)
+            .WithMany(u => u.RefreshTokens)
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(r => r.UserId);
+    }
+}

@@ -1,0 +1,44 @@
+## .NET
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+.vs/
+.vscode/
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
+
+## Test results
+*.trx
+TestResults/
+
+## File storage lokal (section 4.7)
+uploads/
+
+## Environment & secrets
+.env
+.env.*
+!.env.example
+appsettings.Production.json
+appsettings.*.local.json
+
+## Rider / VS / VSCode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.docstates
+.idea/
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Database
+*.db

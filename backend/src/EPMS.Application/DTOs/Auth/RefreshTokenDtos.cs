@@ -1,0 +1,8 @@
+namespace EPMS.Application.DTOs.Auth;
+
+public class RefreshTokenResponseDto
+{
+    public string AccessToken { get; set; } = string.Empty;
+
+    public DateTime AccessTokenExpiresAt { get; set; }
+}
