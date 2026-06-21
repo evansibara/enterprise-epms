@@ -11,7 +11,7 @@
 
 ## 📖 Tentang Proyek
 
-**Enterprise EPMS** adalah Sistem Manajemen Kinerja Karyawan berbasis *full-stack* yang dikembangkan untuk kebutuhan skala perusahaan (Enterprise). Aplikasi ini dirancang menggunakan *Clean Architecture* dan *Feature-Sliced Design* untuk memastikan stabilitas, skalabilitas, serta kemudahan dalam pemeliharaan jangka panjang.
+**Enterprise EPMS** adalah Sistem Manajemen Kinerja Karyawan berbasis *full-stack* yang dikembangkan sebagai **proyek portofolio (*showcase*)**. Meskipun ini adalah proyek personal, aplikasi ini dirancang dan diimplementasikan menggunakan standar industri tertinggi (seperti *Clean Architecture* dan *Feature-Sliced Design*) untuk mendemonstrasikan kemampuan pengembangan perangkat lunak tingkat *Enterprise*.
 
 ## 🏗️ Arsitektur & Teknologi
 
@@ -113,4 +113,4 @@ Untuk menjalankan pengujian secara manual:
 ---
 
 ## 📄 Lisensi
-Hak cipta © dilindungi. Proyek ini bersifat *proprietary* dan ditujukan untuk operasional tingkat perusahaan.
+Proyek ini bersifat *Open Source* dan dirilis di bawah [MIT License](https://opensource.org/licenses/MIT). Anda bebas untuk mempelajari, memodifikasi, dan menggunakan kode ini sebagai referensi pembelajaran.
