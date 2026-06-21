@@ -1,5 +1,10 @@
 # Enterprise EPMS (Sistem Manajemen Kinerja Karyawan)
 
+![Backend CI](https://github.com/USERNAME/REPO/actions/workflows/backend.yml/badge.svg)
+![Frontend CI](https://github.com/USERNAME/REPO/actions/workflows/frontend.yml/badge.svg)
+
+*(Catatan: Sesuaikan `USERNAME/REPO` dengan link repository GitHub Anda)*
+
 Enterprise EPMS adalah Sistem Manajemen Kinerja Karyawan (Employee Performance Management System) kelas *enterprise* secara *full-stack*. Aplikasi ini menyediakan seperangkat alat yang komprehensif untuk mengelola kinerja karyawan, dirancang dengan arsitektur modern dan standar industri terbaik.
 
 ## 🏗 Arsitektur & Teknologi
@@ -29,6 +34,11 @@ Deployment yang dikemas (*containerized*) dan konfigurasi infrastruktur mengguna
 - **Caching:** Redis 7
 - **Kontainerisasi:** Docker & Docker Compose
 - **Jaringan:** Jaringan *bridge* Docker yang terisolasi
+
+### 🔄 CI/CD Pipeline (`/.github/workflows`)
+Repositori ini telah dilengkapi dengan *Continuous Integration* menggunakan **GitHub Actions** untuk memastikan stabilitas kode dan mencegah kerentanan sebelum digabungkan ke cabang utama (*main branch*):
+- **Backend CI:** Mengotomatiskan proses `Restore`, `Build`, dan pengujian `Unit/Integration Tests` untuk *Push* dan *Pull Request* di lingkungan .NET 8.
+- **Frontend CI:** Mengotomatiskan proses pengecekan kualitas kode (*Linting*), instalasi dependensi, dan `Build` aplikasi untuk *Push* dan *Pull Request* di lingkungan Node.js.
 
 ## 📂 Struktur Proyek
 
